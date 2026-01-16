@@ -1,0 +1,29 @@
+# Environment files with secrets
+.env
+.env.local
+.env.production
+
+# Keep example file
+!.env.example
+
+# Docker volumes (generated data)
+db-data/
+server-local-data/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
