@@ -50,4 +50,3 @@ databases:
   - name: gargantua-crm-db
     plan: starter
     databaseName: twenty
-    user: postgres
