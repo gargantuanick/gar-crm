@@ -1,0 +1,53 @@
+# Render Deployment for Twenty CRM
+# Since Twenty CRM uses multiple services (server, worker, db, redis),
+# the Blueprint approach requires multiple Dockerfiles.
+# 
+# RECOMMENDED: Manual deployment via Render Dashboard
+#
+# Alternative: Use Render's one-click Docker deploy for each service
+
+services:
+  # Main Twenty CRM Server
+  - type: web
+    name: gargantua-crm
+    runtime: image
+    image:
+      url: docker.io/twentycrm/twenty:latest
+    envVars:
+      - key: NODE_PORT
+        value: "3000"
+      - key: SERVER_URL
+        value: https://crm.gargantua.llc
+      - key: PG_DATABASE_URL
+        sync: false  # Set in Render dashboard
+      - key: REDIS_URL
+        sync: false  # Set in Render dashboard
+      - key: APP_SECRET
+        sync: false
+      - key: AUTH_GOOGLE_ENABLED
+        value: "true"
+      - key: AUTH_GOOGLE_CLIENT_ID
+        sync: false
+      - key: AUTH_GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: AUTH_GOOGLE_CALLBACK_URL
+        value: https://crm.gargantua.llc/auth/google/redirect
+      - key: AUTH_GOOGLE_APIS_CALLBACK_URL
+        value: https://crm.gargantua.llc/auth/google-apis/get-access-token
+      - key: MESSAGING_PROVIDER_GMAIL_ENABLED
+        value: "true"
+      - key: CALENDAR_PROVIDER_GOOGLE_ENABLED
+        value: "true"
+      - key: STORAGE_TYPE
+        value: local
+    healthCheckPath: /healthz
+    disk:
+      name: crm-storage
+      mountPath: /app/packages/twenty-server/.local-storage
+      sizeGB: 1
+
+databases:
+  - name: gargantua-crm-db
+    plan: starter
+    databaseName: twenty
+    user: postgres
